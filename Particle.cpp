@@ -155,8 +155,11 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2f mouseClickPosit
 
     //Needing to do CartesianPlane and CenterCoordinate
 
+
     m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
     
+
+
     m_color1 = { rand() % 256, rand() % 256, rand() % 256 };
     m_color2 = { rand() % 256, rand() % 256, rand() % 256 };
 
@@ -176,12 +179,12 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2f mouseClickPosit
 void Particle::draw(RenderTarget& target, RenderStates states) const
 {
     sf::VertexArray lines(sf::TriangleFan, m_numPoints + 1);
-    Vector2f center = m_cartesianPlane.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane.getView());
+    Vector2i center = target.mapCoordsToPixel(m_centerCoordinate);
     lines[0].position = center;
     lines[0].color = m_color1;
     for (int j = 1; j <= m_numPoints; ++j)
     {
-        lines[j].position = m_cartesianPlane.mapCoordsToPixel(m_A(j - 1),m_cartesianPlane.getview());
+        lines[j].position = target.mapCoordsToPixel(m_A(j-1));
         lines[j].color = m_color2;
     }
     target.draw(lines);
