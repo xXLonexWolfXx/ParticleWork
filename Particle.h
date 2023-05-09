@@ -12,7 +12,7 @@ using namespace sf;
 class Particle : public Drawable
 {
 public:
-	Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition);
+	Particle(RenderTarget& target, int numPoints, Vector2f mouseClickPosition);
 	virtual void draw(RenderTarget& target, RenderStates states) const override;
     void update(float dt);
     float getTTL() { return m_ttl; }

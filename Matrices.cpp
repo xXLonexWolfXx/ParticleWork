@@ -4,7 +4,7 @@ using namespace std;
 //Most of this is pulled from M04 Assignment (Matrices)
 namespace Matrices {
 
-	Matrix::Matrix(int _rows; int _cols)
+	Matrix::Matrix(int _rows, int _cols)
 	{
 		// Creating the ints for rows and cols based on constructor
 		rows = _rows;
@@ -18,7 +18,7 @@ namespace Matrices {
 			// Sets each item within vector to be set as 0 to initialize
 			for (int j = 0; j < cols; ++j)
 			{
-				a(i, j) = 0;
+				a.at(i).at(j) = 0;
 			}
 		}
 	}
@@ -34,7 +34,7 @@ namespace Matrices {
 		Matrix retMatrix(a.getRows(), a.getCols());
 		for (int i = 0; i < a.getRows(); ++i)
 		{
-			for (int j = 0; j < a.getCols() ++j)
+			for (int j = 0; j < a.getCols(); ++j)
 			{
 				retMatrix(i, j) = a(i, j) + b(i, j);
 			}
@@ -97,25 +97,24 @@ namespace Matrices {
 		return os;
 	}
 }
-RotationMatrix::RotationMatrix(double theta) : Matrix::Matrix(2, 2)
+Matrices::RotationMatrix::RotationMatrix(double theta) : Matrix::Matrix(2, 2)
 {
-	a(0, 0) = cos(theta);
-	a(0, 1) = sin(theta);
-	a(1, 0) = 0 - a(0, 1);
-	a(1, 1) = a(0, 0);
+	a.at(0).at(0) = cos(theta);
+	a.at(0).at(1) = sin(theta);
+	a.at(1).at(0) = 0 - a.at(0).at(1);
+	a.at(1).at(1) = a.at(0).at(0);
 }
 
-ScalingMatrix::ScalingMatrix(double scale) : Matrix::Matrix(2, 2)
+Matrices::ScalingMatrix::ScalingMatrix(double scale) : Matrix::Matrix(2, 2)
 {
-	a(0, 0) = scale;
-	a(1, 1) = scale;
+	a.at(0).at(0) = scale;
+	a.at(1).at(1) = scale;
 }
-
-TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols): Matrix::Matrix(2, nCols) 
+Matrices::TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols): Matrix::Matrix(2, nCols) 
 {
 	for (int i = 0; i < nCols; ++i)
 	{
-		a(i, 0) = xShift;
-		a(i, 1) = yShift;
+		a.at(i).at(0) = xShift;
+		a.at(i).at(1) = yShift;
 	}
 }

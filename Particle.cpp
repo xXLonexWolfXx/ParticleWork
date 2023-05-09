@@ -145,17 +145,17 @@ void Particle::unitTests()
 
 //145 Lines later, we are finally writing our own code LMAO
 
-Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition) : m_A(2,numPoints), m_ttl(TTL), m_numPoints(numPoints)
+Particle::Particle(RenderTarget& target, int numPoints, Vector2f mouseClickPosition) : m_A(2,numPoints), m_ttl(TTL), m_numPoints(numPoints)
 {
     m_radiansPerSec = (float)rand() / (RAND_MAX + 1);
     m_radiansPerSec *= PI;
     vy = (rand() % 401) + 100;
     vx = (rand() % 401) + 100;
-    if (rand() % 2) == 1) vx *= -1;
+    if ((rand() % 2) == 1) vx *= -1;
 
     //Needing to do CartesianPlane and CenterCoordinate
 
-    setSize(target.getSize().x, (-1.0) * target.getSize().y);
+    m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
     
     m_color1 = { rand() % 256, rand() % 256, rand() % 256 };
     m_color2 = { rand() % 256, rand() % 256, rand() % 256 };
@@ -173,15 +173,15 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 
 }
 
-virtual void Particle::draw(RenderTarget& target, RenderStates states) const override
+void Particle::draw(RenderTarget& target, RenderStates states) const
 {
-    sf::VertexArray lines(sf::TriangleFan, numPoints + 1);
-    Vector2f center = m_centerCoordinate;
+    sf::VertexArray lines(sf::TriangleFan, m_numPoints + 1);
+    Vector2f center = m_cartesianPlane.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane.getView());
     lines[0].position = center;
     lines[0].color = m_color1;
-    for (int j = 1; j <= numPoints; ++j)
+    for (int j = 1; j <= m_numPoints; ++j)
     {
-        lines[j].position = mapCoordsToPixel(m_A(j - 1));
+        lines[j].position = m_cartesianPlane.mapCoordsToPixel(m_A(j - 1),m_cartesianPlane.getview());
         lines[j].color = m_color2;
     }
     target.draw(lines);
@@ -193,9 +193,9 @@ void Particle::update(float dt)
 	rotate(dt * m_radiansPerSec);
 	scale(SCALE);
 	float dx, dy;
-	dx = m_vx * dt;
-	m_vy -= G * dt;
-    dy = m_vy * dt;
+	dx = vx * dt;
+	vy -= G * dt;
+    dy = vy * dt;
 	translate(dx, dy);
 }
 
@@ -203,7 +203,7 @@ void Particle::update(float dt)
 
 void Particle::rotate(double theta)
 {
-	rotationMatrix shift_matrix(theta);
+	RotationMatrix shift_matrix(theta);
 	m_A = shift_matrix * m_A;
 }
 
