@@ -11,7 +11,7 @@ Engine::Engine() {
 void Engine::run() {
 	Clock timePerFrame;
 	cout << "Starting Particle unit tests..." << endl;
-	Particle p(m_Window, 4, { m_Window.getSize().x / 2,m_Window.getSize().y / 2});
+	Particle p(m_Window, 4, { (float)(m_Window.getSize().x / 2),(float)(m_Window.getSize().y / 2)});
 	p.unitTests();
 	cout << "Unit tests complete. Starting engine..." << endl;
 	while (m_Window.isOpen()) {
@@ -28,6 +28,7 @@ void Engine::input() {
 			// If so, close the window
 		// Otherwise, check for a left click
 	Event event;
+	m_Window.pollEvent(event);
 	if (event.type == Event::Closed) {
 		m_Window.close();
 	}
@@ -46,7 +47,7 @@ void Engine::input() {
 }
 
 void Engine::update(float dtAsSeconds) {
-	for (int i = 0; i < m_particles.size(); ++i) {
+	for (long unsigned int i = 0; i < m_particles.size(); ++i) {
 		if (m_particles.at(i).getTTL() <= 0) {
 			m_particles.erase(m_particles.begin() + i);
 			--i;
@@ -60,7 +61,7 @@ void Engine::update(float dtAsSeconds) {
 
 void Engine::draw() {
 	m_Window.clear();
-	for (int i = 0; i < m_particles.size(); ++i) {
+	for (long unsigned int i = 0; i < m_particles.size(); ++i) {
 		m_Window.draw(m_particles.at(i));
 	}
 	m_Window.display();

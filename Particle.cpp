@@ -58,7 +58,7 @@ void Particle::unitTests()
         cout << "Failed." << endl;
     }
 
-    
+
     cout << "Testing Particles..." << endl;
     cout << "Testing Particle mapping to Cartesian origin..." << endl;
     if (m_centerCoordinate.x != 0 || m_centerCoordinate.y != 0)
@@ -157,11 +157,9 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2f mouseClickPosit
 
 
     m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
-    
 
-
-    m_color1 = { rand() % 256, rand() % 256, rand() % 256 };
-    m_color2 = { rand() % 256, rand() % 256, rand() % 256 };
+    m_color1 = { (Uint8)(rand() % 256), (Uint8)(rand() % 256), (Uint8)(rand() % 256) };
+    m_color2 = { (Uint8)(rand() % 256), (Uint8)(rand() % 256), (Uint8)(rand() % 256) };
 
     double theta, dTheta = 2 * PI / numPoints - 1;
     for (int i = 0; i < numPoints; ++i) {
@@ -184,7 +182,7 @@ void Particle::draw(RenderTarget& target, RenderStates states) const
     lines[0].color = m_color1;
     for (int j = 1; j <= m_numPoints; ++j)
     {
-        lines[j].position = target.mapCoordsToPixel(m_A(j-1));
+        lines[j].position = target.mapCoordsToPixel({m_A(j-1).at(0),m_A(j-1).at(1)});
         lines[j].color = m_color2;
     }
     target.draw(lines);
